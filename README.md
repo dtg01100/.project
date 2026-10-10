@@ -60,6 +60,13 @@ generate approvers from `project-maintainers` only.
 to transfer issues between Project Bluefin repositories via the reusable
 `.github/workflows/prow-transfer.yml` workflow and the `MERGERAPTOR` GitHub App.
 
+The reusable transfer workflow checks out this repository at the ref supplied
+via the required `app-ref` input. Pin `app-ref` to the same commit the workflow
+file is pinned to so the parser code that runs (`scripts/prow-transfer.cjs`)
+matches the SHA the caller reviewed. Without this, the SHA pin on the workflow
+file only pins the caller; the parser still floats on the mutable default
+branch (projectbluefin/common#1446).
+
 Deploy this repository's authorization workflow and roster before updating
 the six existing Prow callers: common, chairlift, gutenprint-printer-app,
 hplip-printer-app, ps-printer-app and ghostscript-printer-app. Then run
